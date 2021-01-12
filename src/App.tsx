@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import Carta from './components/carta/carta';
 import axios from 'axios';
 import Pokemon from './classes/pokemon';
+
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,13 +11,16 @@ import ReactDOM from 'react-dom';
 
 
 function App() {
-  const [habilidade, setHabilidade] = useState();
-  const [quantidadeCartas, setQuantidadeCartas] = useState();
+  const [habilidade, setHabilidade] = React.useState(null);
+  const [nomeHabilidade, setNomeHabilidade] = React.useState(null);
+  const [nomePokemon, setNomePokemon] = React.useState();
+  const [mostrarPokemons, setMostrarPokemons] = React.useState(false);
   const [pokemons, setPokemons] = React.useState<Pokemon[]>([]);
   const [cartasNaMao, setCartasNaMao] = React.useState<Pokemon[]>([]);
 
 
   const sorteados = () => {
+
     for (let i = 0; i < 32; i++) {
 
       let num = getRandom(1, 500);
@@ -35,13 +38,13 @@ function App() {
           pokemons.push(poke)
         })
 
+
     }
-    console.log(pokemons)
 
     setTimeout(() => {
       cartasNaMao.push(pokemons[0], pokemons[1], pokemons[2], pokemons[3], pokemons[4]);
       console.log(cartasNaMao)
-      renderizaPokemons();
+      setMostrarPokemons(true);
     }, 1000)
 
   }
@@ -56,23 +59,27 @@ function App() {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  const setaHabilidade = (habilidadeEscolhida: any) => {
-    setTimeout(() => {
-      setHabilidade(habilidadeEscolhida);
-    }, 1000)
-    setTimeout(() => {
-      alert(habilidade)
-    }, 1000)
-
+  const montaHabilidade = (habilidade: any, nomeHabilidade: any, nomePokemon: any) => {
+    setHabilidade(habilidade);
+    setNomeHabilidade(nomeHabilidade);
+    setNomePokemon(nomePokemon);
   }
 
 
+  const MostraHabilidade = () => {
+    return (
+      <div className="habilidade">
+        <h3>Pokemon: {nomePokemon}</h3>
+        <h4>{nomeHabilidade}: {habilidade}</h4>
+      </div>
+    )
+  }
 
-  function renderizaPokemons() {
-    const cards =
+
+  const PlayGame = () => {
+    return (
 
       <Container className="mw-100">
-        {habilidade}
         <Row>
           {
             cartasNaMao.map(carta =>
@@ -82,12 +89,12 @@ function App() {
                   <Card.Body>
                     <Card.Title>{carta.nome}</Card.Title>
                     <Card.Text>
-                    <h5 onClick={() => setaHabilidade(carta.hp)}>HP: {carta.hp}</h5>
-                    <h5 id='ataque'>ataque:{carta.ataque}</h5>
-                    <h5 id='defesa'>defesa:{carta.defesa}</h5>
-                    <h5 id='ataque especial'>ataque especial:{carta.ataque_especial}</h5>
-                    <h5 id='defesa especia'>defesa especia:{carta.defesa_especial}</h5>
-                    <h5 id='velocidade'>velocidade:{carta.velocidade}</h5>
+                      <h5 onClick={() => montaHabilidade(carta.hp, "HP", carta.nome)} >HP: {carta.hp}</h5>
+                      <h5 onClick={() => montaHabilidade(carta.ataque, "Ataque", carta.nome)}>ataque:{carta.ataque}</h5>
+                      <h5 onClick={() => montaHabilidade(carta.defesa, "Defesa", carta.nome)}>defesa:{carta.defesa}</h5>
+                      <h5 onClick={() => montaHabilidade(carta.ataque_especial, "Ataque Especial", carta.nome)}>ataque especial:{carta.ataque_especial}</h5>
+                      <h5 onClick={() => montaHabilidade(carta.defesa_especial, "Defesa Especial", carta.nome)}>defesa especia:{carta.defesa_especial}</h5>
+                      <h5 onClick={() => montaHabilidade(carta.velocidade, "Velocidade", carta.nome)}>velocidade:{carta.velocidade}</h5>
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -97,22 +104,20 @@ function App() {
         </Row>
       </Container >
 
-      ReactDOM.render(cards, document.getElementById('root'));
+    )
 
   }
 
 
   return (
+    
+      <Fragment>
+        <button className="botaoJogar" onClick={sorteados}>Play</button>
+        {habilidade != null ? <MostraHabilidade /> : null}
+        {mostrarPokemons ? <PlayGame /> : null}
+      </Fragment>
 
-    <Fragment>
-
-      <button onClick={sorteados}>Sortear</button>
-      <button onClick={() => setaHabilidade(50)}></button>
-      <div id='root'>
-        
-
-      </div>
-    </Fragment>
+    
   );
 
 }

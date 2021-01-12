@@ -1,17 +1,29 @@
-
-.container{
+.container {
     border: 2px solid blue;
     margin-top: 20%;
+    width: 100%;
 }
 
-/* .row {
-    border: 2px solid red;
+h5 {
+    cursor: pointer;
 }
 
-.col {
-    border: 2px solid yellow; 
-} */
-/* .button{
-    margin-left: auto;
-    margin-right: auto;
-} */
+.habilidade {
+    border: 2px solid blue;
+    /* margin-top: 15%; */
+    position: absolute;
+    margin-top: 15%;
+    left: 50%;
+    transform: translate(-50%);
+    text-align: center;
+}
+
+.botaoJogar {
+    border-radius: 5px;
+    position: relative;
+    margin-top: 10px;
+    left: 50%;
+    transform: translate(-50%);
+    height: 35px;
+    width: 100px;
+}
