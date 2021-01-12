@@ -1,10 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import axios from 'axios';
 import Pokemon from './classes/pokemon';
-
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 
