@@ -1,6 +1,5 @@
 .container {
-    border: 2px solid blue;
-    margin-top: 20%;
+    margin-top: 15%;
     width: 100%;
 }
 
@@ -9,21 +8,50 @@ h5 {
 }
 
 .habilidade {
-    border: 2px solid blue;
     /* margin-top: 15%; */
     position: absolute;
-    margin-top: 15%;
+    margin-top: 10%;
     left: 50%;
     transform: translate(-50%);
     text-align: center;
 }
 
-.botaoJogar {
+#botaoJogar {
+    background-color: #fc6963;
     border-radius: 5px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    width: 160px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+#botaoConfirmar {
+    background-color: #fc6963;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    position: absolute;
+    margin-top: 10%;
+    left: 58%;
+    font-size: 14px;
+}
+
+.header {
     position: relative;
     margin-top: 10px;
     left: 50%;
     transform: translate(-50%);
     height: 35px;
     width: 100px;
+    text-align: center;
+}
+
+.row .card {
+    border-radius: 15px;
+}
+
+.tituloCard {
+    font-size: 16px;
 }

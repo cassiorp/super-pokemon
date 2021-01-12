@@ -11,9 +11,11 @@ import ReactDOM from 'react-dom';
 
 
 function App() {
+  const [posicao, setPosicao] = React.useState(0);
   const [habilidade, setHabilidade] = React.useState(null);
   const [nomeHabilidade, setNomeHabilidade] = React.useState(null);
   const [nomePokemon, setNomePokemon] = React.useState();
+  const [mostraBotao, setMostraBotao] = React.useState(false);
   const [mostrarPokemons, setMostrarPokemons] = React.useState(false);
   const [pokemons, setPokemons] = React.useState<Pokemon[]>([]);
   const [cartasNaMao, setCartasNaMao] = React.useState<Pokemon[]>([]);
@@ -34,18 +36,20 @@ function App() {
             getStat(data, 2), getStat(data, 3),
             getStat(data, 4), getStat(data, 5)
           );
-
           pokemons.push(poke)
         })
-
-
     }
-
+   
     setTimeout(() => {
       cartasNaMao.push(pokemons[0], pokemons[1], pokemons[2], pokemons[3], pokemons[4]);
       console.log(cartasNaMao)
       setMostrarPokemons(true);
+      setMostraBotao(true);
+      pokemons.splice(0, 5);
     }, 1000)
+
+    
+      
 
   }
 
@@ -65,7 +69,21 @@ function App() {
     setNomePokemon(nomePokemon);
   }
 
+  const jogar = () => {
 
+    setTimeout(() => {
+      const index = cartasNaMao.findIndex(i => i.nome == nomePokemon);
+      cartasNaMao.splice(index, 1);
+      cartasNaMao.push(pokemons[0])
+      pokemons.splice(0, 1);
+    }, 1000);
+   
+    console.log(cartasNaMao)
+   
+  }
+
+
+  //TODOS OS METODOS COM PRIMEIRA LETRA MAIUSCULA SÃO COMPONENTES
   const MostraHabilidade = () => {
     return (
       <div className="habilidade">
@@ -77,9 +95,11 @@ function App() {
 
 
   const PlayGame = () => {
+    let pos: number = 0;
     return (
+      <Fragment>
 
-      <Container className="mw-100">
+        <Container className="mw-100">
         <Row>
           {
             cartasNaMao.map(carta =>
@@ -87,7 +107,7 @@ function App() {
                 <Card style={{ width: '18rem' }} >
                   <Card.Img variant="top" src={carta.img} />
                   <Card.Body>
-                    <Card.Title>{carta.nome}</Card.Title>
+                    <Card.Title className="font-weight-bold text-uppercase card text-center">{carta.nome}</Card.Title>
                     <Card.Text>
                       <h5 onClick={() => montaHabilidade(carta.hp, "HP", carta.nome)} >HP: {carta.hp}</h5>
                       <h5 onClick={() => montaHabilidade(carta.ataque, "Ataque", carta.nome)}>ataque:{carta.ataque}</h5>
@@ -99,10 +119,17 @@ function App() {
                   </Card.Body>
                 </Card>
               </Col>
+
             )
           }
+
         </Row>
       </Container >
+        
+      </Fragment>
+
+
+      
 
     )
 
@@ -110,14 +137,23 @@ function App() {
 
 
   return (
-    
-      <Fragment>
-        <button className="botaoJogar" onClick={sorteados}>Play</button>
-        {habilidade != null ? <MostraHabilidade /> : null}
-        {mostrarPokemons ? <PlayGame /> : null}
-      </Fragment>
 
-    
+    <Fragment>
+      <div className="header">
+        {mostraBotao ? <div>GO GO!</div> : <button id="botaoJogar" onClick={sorteados}>Começar Jogo</button>}
+      </div>
+
+      {habilidade != null ?
+        <div>
+          <MostraHabilidade />
+          <button id="botaoConfirmar" onClick={() => jogar()}>Confirmar carta</button>
+        </div>
+        : null}
+
+      {mostrarPokemons ? <PlayGame /> : null}
+    </Fragment>
+
+
   );
 
 }
