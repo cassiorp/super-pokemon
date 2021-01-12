@@ -39,7 +39,7 @@ function App() {
           pokemons.push(poke)
         })
     }
-   
+
     setTimeout(() => {
       cartasNaMao.push(pokemons[0], pokemons[1], pokemons[2], pokemons[3], pokemons[4]);
       console.log(cartasNaMao)
@@ -48,8 +48,8 @@ function App() {
       pokemons.splice(0, 5);
     }, 1000)
 
-    
-      
+
+
 
   }
 
@@ -77,9 +77,9 @@ function App() {
       cartasNaMao.push(pokemons[0])
       pokemons.splice(0, 1);
     }, 1000);
-   
+
     console.log(cartasNaMao)
-   
+
   }
 
 
@@ -100,36 +100,32 @@ function App() {
       <Fragment>
 
         <Container className="mw-100">
-        <Row>
-          {
-            cartasNaMao.map(carta =>
-              <Col className="row d-flex justify-content-center">
-                <Card style={{ width: '18rem' }} >
-                  <Card.Img variant="top" src={carta.img} />
-                  <Card.Body>
-                    <Card.Title className="font-weight-bold text-uppercase card text-center">{carta.nome}</Card.Title>
-                    <Card.Text>
-                      <h5 onClick={() => montaHabilidade(carta.hp, "HP", carta.nome)} >HP: {carta.hp}</h5>
-                      <h5 onClick={() => montaHabilidade(carta.ataque, "Ataque", carta.nome)}>ataque:{carta.ataque}</h5>
-                      <h5 onClick={() => montaHabilidade(carta.defesa, "Defesa", carta.nome)}>defesa:{carta.defesa}</h5>
-                      <h5 onClick={() => montaHabilidade(carta.ataque_especial, "Ataque Especial", carta.nome)}>ataque especial:{carta.ataque_especial}</h5>
-                      <h5 onClick={() => montaHabilidade(carta.defesa_especial, "Defesa Especial", carta.nome)}>defesa especia:{carta.defesa_especial}</h5>
-                      <h5 onClick={() => montaHabilidade(carta.velocidade, "Velocidade", carta.nome)}>velocidade:{carta.velocidade}</h5>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
+          <Row>
+            {
+              cartasNaMao.map(carta =>
+                <Col className="row d-flex justify-content-center">
+                  <Card style={{ width: '18rem' }} >
+                    <Card.Img variant="top" src={carta.img} />
+                    <Card.Body>
+                      <Card.Title className="font-weight-bold text-uppercase card text-center">{carta.nome}</Card.Title>
+                      <Card.Text>
+                        <h5 onClick={() => montaHabilidade(carta.hp, "HP", carta.nome)} >HP: {carta.hp}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.ataque, "Ataque", carta.nome)}>Ataque: {carta.ataque}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.defesa, "Defesa", carta.nome)}>Defesa: {carta.defesa}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.ataque_especial, "Ataque Especial", carta.nome)}>Ataque especial: {carta.ataque_especial}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.defesa_especial, "Defesa Especial", carta.nome)}>Defesa especia: {carta.defesa_especial}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.velocidade, "Velocidade", carta.nome)}>Velocidade: {carta.velocidade}</h5>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              )
+            }
 
-            )
-          }
+          </Row>
+        </Container >
 
-        </Row>
-      </Container >
-        
       </Fragment>
-
-
-      
 
     )
 
