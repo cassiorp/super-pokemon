@@ -1,23 +1,26 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import Carta from './components/carta/carta';
 import axios from 'axios';
 import Pokemon from './classes/pokemon';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 
 
 
 function App() {
-  const [habilidade, setHabilidade] = useState();
-  const [quantidadeCartas, setQuantidadeCartas] = useState();
+  const [posicao, setPosicao] = React.useState(0);
+  const [habilidade, setHabilidade] = React.useState(null);
+  const [nomeHabilidade, setNomeHabilidade] = React.useState(null);
+  const [nomePokemon, setNomePokemon] = React.useState();
+  const [mostraBotao, setMostraBotao] = React.useState(false);
+  const [mostrarPokemons, setMostrarPokemons] = React.useState(false);
   const [pokemons, setPokemons] = React.useState<Pokemon[]>([]);
   const [cartasNaMao, setCartasNaMao] = React.useState<Pokemon[]>([]);
 
 
   const sorteados = () => {
+
     for (let i = 0; i < 32; i++) {
 
       let num = getRandom(1, 500);
@@ -31,18 +34,20 @@ function App() {
             getStat(data, 2), getStat(data, 3),
             getStat(data, 4), getStat(data, 5)
           );
-
           pokemons.push(poke)
         })
-
     }
-    console.log(pokemons)
 
     setTimeout(() => {
       cartasNaMao.push(pokemons[0], pokemons[1], pokemons[2], pokemons[3], pokemons[4]);
       console.log(cartasNaMao)
-      renderizaPokemons();
+      setMostrarPokemons(true);
+      setMostraBotao(true);
+      pokemons.splice(0, 5);
     }, 1000)
+
+
+
 
   }
 
@@ -56,48 +61,71 @@ function App() {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  const setaHabilidade = (habilidadeEscolhida: any) => {
+  const montaHabilidade = (habilidade: any, nomeHabilidade: any, nomePokemon: any) => {
+    setHabilidade(habilidade);
+    setNomeHabilidade(nomeHabilidade);
+    setNomePokemon(nomePokemon);
+  }
+
+  const jogar = () => {
+
     setTimeout(() => {
-      setHabilidade(habilidadeEscolhida);
-    }, 1000)
-    setTimeout(() => {
-      alert(habilidade)
-    }, 1000)
+      const index = cartasNaMao.findIndex(i => i.nome == nomePokemon);
+      cartasNaMao.splice(index, 1);
+      cartasNaMao.push(pokemons[0])
+      pokemons.splice(0, 1);
+    }, 1000);
+
+    console.log(cartasNaMao)
 
   }
 
 
+  //TODOS OS METODOS COM PRIMEIRA LETRA MAIUSCULA SÃO COMPONENTES
+  const MostraHabilidade = () => {
+    return (
+      <div className="habilidade">
+        <h3>Pokemon: {nomePokemon}</h3>
+        <h4>{nomeHabilidade}: {habilidade}</h4>
+      </div>
+    )
+  }
 
-  function renderizaPokemons() {
-    const cards =
 
-      <Container className="mw-100">
-        {habilidade}
-        <Row>
-          {
-            cartasNaMao.map(carta =>
-              <Col className="row d-flex justify-content-center">
-                <Card style={{ width: '18rem' }} >
-                  <Card.Img variant="top" src={carta.img} />
-                  <Card.Body>
-                    <Card.Title>{carta.nome}</Card.Title>
-                    <Card.Text>
-                    <h5 onClick={() => setaHabilidade(carta.hp)}>HP: {carta.hp}</h5>
-                    <h5 id='ataque'>ataque:{carta.ataque}</h5>
-                    <h5 id='defesa'>defesa:{carta.defesa}</h5>
-                    <h5 id='ataque especial'>ataque especial:{carta.ataque_especial}</h5>
-                    <h5 id='defesa especia'>defesa especia:{carta.defesa_especial}</h5>
-                    <h5 id='velocidade'>velocidade:{carta.velocidade}</h5>
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            )
-          }
-        </Row>
-      </Container >
+  const PlayGame = () => {
+    let pos: number = 0;
+    return (
+      <Fragment>
 
-      ReactDOM.render(cards, document.getElementById('root'));
+        <Container className="mw-100">
+          <Row>
+            {
+              cartasNaMao.map(carta =>
+                <Col className="row d-flex justify-content-center">
+                  <Card style={{ width: '18rem' }} >
+                    <Card.Img variant="top" src={carta.img} />
+                    <Card.Body>
+                      <Card.Title className="font-weight-bold text-uppercase card text-center">{carta.nome}</Card.Title>
+                      <Card.Text>
+                        <h5 onClick={() => montaHabilidade(carta.hp, "HP", carta.nome)} >HP: {carta.hp}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.ataque, "Ataque", carta.nome)}>Ataque: {carta.ataque}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.defesa, "Defesa", carta.nome)}>Defesa: {carta.defesa}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.ataque_especial, "Ataque Especial", carta.nome)}>Ataque especial: {carta.ataque_especial}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.defesa_especial, "Defesa Especial", carta.nome)}>Defesa especia: {carta.defesa_especial}</h5>
+                        <h5 onClick={() => montaHabilidade(carta.velocidade, "Velocidade", carta.nome)}>Velocidade: {carta.velocidade}</h5>
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              )
+            }
+
+          </Row>
+        </Container >
+
+      </Fragment>
+
+    )
 
   }
 
@@ -105,14 +133,21 @@ function App() {
   return (
 
     <Fragment>
-
-      <button onClick={sorteados}>Sortear</button>
-      <button onClick={() => setaHabilidade(50)}></button>
-      <div id='root'>
-        
-
+      <div className="header">
+        {mostraBotao ? <div>GO GO!</div> : <button id="botaoJogar" onClick={sorteados}>Começar Jogo</button>}
       </div>
+
+      {habilidade != null ?
+        <div>
+          <MostraHabilidade />
+          <button id="botaoConfirmar" onClick={() => jogar()}>Confirmar carta</button>
+        </div>
+        : null}
+
+      {mostrarPokemons ? <PlayGame /> : null}
     </Fragment>
+
+
   );
 
 }
